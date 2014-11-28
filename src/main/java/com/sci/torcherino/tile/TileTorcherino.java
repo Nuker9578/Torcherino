@@ -39,7 +39,8 @@ public class TileTorcherino extends TileEntity
 
         if (this.cachedMode != this.mode)
         {
-            this.box = new Box(this.xCoord - this.mode, this.yCoord - 1, this.zCoord - mode, this.xCoord + mode, this.yCoord + 1, this.zCoord + mode);
+            this.box = new Box(this.xCoord - this.mode, this.yCoord - 1, this.zCoord - this.mode,
+                    this.xCoord + this.mode, this.yCoord + 1, this.zCoord + this.mode);
             this.cachedMode = this.mode;
         }
 
@@ -50,7 +51,7 @@ public class TileTorcherino extends TileEntity
         {
             for (int y = this.box.yMin; y <= this.box.yMax; y++)
             {
-                for (int z = this.box.zMin; z <= this.box.zMax; x++)
+                for (int z = this.box.zMin; z <= this.box.zMax; z++)
                 {
                     final Block block = this.worldObj.getBlock(x, y, z);
 
@@ -143,6 +144,12 @@ public class TileTorcherino extends TileEntity
             this.xMax = xMax;
             this.yMax = yMax;
             this.zMax = zMax;
+        }
+
+        @Override
+        public String toString()
+        {
+            return "(" + this.xMin + ", " + this.yMin + ", " + this.zMin + ") to (" + this.xMax + ", " + this.yMax + ", " + this.zMax + ")";
         }
     }
 }
