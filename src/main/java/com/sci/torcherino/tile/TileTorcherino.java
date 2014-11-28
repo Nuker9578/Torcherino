@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class TileTorcherino extends TileEntity
 {
-    private static final String[] MODES = new String[]{"Stopped", "Radius: +1, Area: 3x3x3", "Radius: +2, Area:5x3x5", "Radius: +3, Area: 7x3x7", "Radius: +4, Area: 9x3x9"};
+    private static final String[] MODES = new String[]{"Stopped", "Radius: +1, Area: 3x3x3", "Radius: +2, Area: 5x3x5", "Radius: +3, Area: 7x3x7", "Radius: +4, Area: 9x3x9"};
     private static final String[] SPEEDS = new String[]{"Stopped", "100% increase", "200% increase", "300% increase", "400% increase"};
 
     private boolean isActive;
@@ -84,14 +84,14 @@ public class TileTorcherino extends TileEntity
     {
         if (sneaking)
         {
-            if (this.speed < SPEEDS.length)
+            if (this.speed < SPEEDS.length - 1)
                 this.speed++;
             else
                 this.speed = 0;
         }
         else
         {
-            if (this.mode < MODES.length)
+            if (this.mode < MODES.length - 1)
                 this.mode++;
             else
                 this.mode = 0;
