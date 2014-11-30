@@ -13,7 +13,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
  * @author sci4me
  * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  */
-@Mod(modid = Props.ID, name = Props.NAME, version = Props.VERSION)
+@Mod(modid = Props.ID, name = Props.NAME, version = Props.VERSION, dependencies = Props.DEPENDENCIES)
 public class Torcherino implements IUpdatableMod
 {
     private static Torcherino instance;
