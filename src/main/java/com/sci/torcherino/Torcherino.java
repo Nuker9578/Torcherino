@@ -2,6 +2,7 @@ package com.sci.torcherino;
 
 import com.sci.mclib.lib.update.IUpdatableMod;
 import com.sci.mclib.lib.update.ModVersion;
+import com.sci.mclib.lib.update.UpdateChecker;
 import com.sci.torcherino.init.ModBlocks;
 import com.sci.torcherino.init.Recipes;
 import cpw.mods.fml.common.Mod;
@@ -36,6 +37,8 @@ public class Torcherino implements IUpdatableMod {
 
         if (!folder.exists())
             folder.mkdir();
+
+        UpdateChecker.register(this);
 
         final Configuration cfg = new Configuration(new File(folder, "Torcherino.cfg"));
         try {
