@@ -30,7 +30,7 @@ public final class ModVersion {
 
     @Override
     public String toString() {
-        return this.major + "." + this.minor;
+        return this.major + "." + this.minor + "s";
     }
 
     public boolean isNewer(final ModVersion newer) {

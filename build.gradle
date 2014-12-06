@@ -39,10 +39,6 @@ minecraft {
     replaceIn "Props.java"
 }
 
-dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-}
-
 version = "${config.minecraft_version}-${config.mod_version}"
 
 processResources {

@@ -1,5 +1,6 @@
 package com.sci.torcherino.tile;
 
+import com.google.common.collect.ImmutableSet;
 import com.sci.torcherino.init.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -13,6 +14,16 @@ import java.util.Random;
  * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  */
 public class TileTorcherino extends TileEntity {
+    private static final ImmutableSet<Block> blacklist = ImmutableSet.of(
+            Blocks.air,
+            Blocks.bedrock,
+            Blocks.obsidian,
+            Blocks.stone,
+            Blocks.glowstone,
+            Blocks.netherrack,
+            Blocks.sand,
+            Blocks.gravel,
+            ModBlocks.torcherino);
     private static final String[] MODES = new String[]{"Stopped", "Radius: +1, Area: 3x3x3", "Radius: +2, Area: 5x3x5", "Radius: +3, Area: 7x3x7", "Radius: +4, Area: 9x3x9"};
     private static final String[] SPEEDS = new String[]{"Stopped", "100% increase", "200% increase", "300% increase", "400% increase"};
 
@@ -58,7 +69,7 @@ public class TileTorcherino extends TileEntity {
                 for (int z = this.zMin; z <= this.zMax; z++) {
                     final Block block = this.worldObj.getBlock(x, y, z);
 
-                    if (block == Blocks.air || block == ModBlocks.torcherino)
+                    if (blacklist.contains(block))
                         continue;
 
                     if (block.getTickRandomly()) {
