@@ -1,10 +1,10 @@
 package com.sci.torcherino;
 
-import com.sci.mclib.lib.update.IUpdatableMod;
-import com.sci.mclib.lib.update.ModVersion;
-import com.sci.mclib.lib.update.UpdateChecker;
 import com.sci.torcherino.init.ModBlocks;
 import com.sci.torcherino.init.Recipes;
+import com.sci.torcherino.update.IUpdatableMod;
+import com.sci.torcherino.update.ModVersion;
+import com.sci.torcherino.update.UpdateChecker;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -17,7 +17,7 @@ import java.io.File;
  * @author sci4me
  * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  */
-@Mod(modid = Props.ID, name = Props.NAME, version = Props.VERSION, dependencies = Props.DEPENDENCIES)
+@Mod(modid = Props.ID, name = Props.NAME, version = Props.VERSION)
 public class Torcherino implements IUpdatableMod {
     private static Torcherino instance;
 

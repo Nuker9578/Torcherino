@@ -1,4 +1,4 @@
 {
-    "version": "1.2s",
-    "description": "Added less OP recipe config option"
+    "version": "1.3s",
+    "description": "Removed SciMCLib dependency"
 }
