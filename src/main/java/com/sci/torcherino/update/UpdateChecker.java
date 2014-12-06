@@ -50,6 +50,15 @@ public final class UpdateChecker {
                 player.addChatMessage(new ChatComponentText(GOLD + "[" + this.mod.name() + "] " + WHITE + "A new version is available: " + AQUA + this.thread.latest().toString()));
                 player.addChatMessage(new ChatComponentText(GRAY + this.thread.description()));
             }
+
+            try {
+                this.thread.interrupt();
+                this.thread.join();
+            } catch (final Throwable ignored) {
+                // don't care
+            } finally {
+                this.thread = null;
+            }
         }
     }
 

@@ -17,7 +17,7 @@ class UpdateCheckThread extends Thread {
     private String description;
 
     public UpdateCheckThread(final IUpdatableMod mod) {
-        super("SciMCLibUpdater: " + mod.name());
+        super("TorcherinoUpdater: " + mod.name());
 
         this.mod = mod;
         this.setDaemon(true);
@@ -25,7 +25,10 @@ class UpdateCheckThread extends Thread {
 
     @Override
     public void run() {
-        while (true) {
+        int attempt = 0;
+        while (attempt < 5) {
+            attempt++;
+
             try {
                 final URL versionUrl = new URL(this.mod.updateURL());
 
@@ -36,7 +39,7 @@ class UpdateCheckThread extends Thread {
                     sb.append(line);
 
                     line = reader.readLine();
-                    if(line == null) break;
+                    if (line == null) break;
                     else sb.append('\n');
                 }
                 reader.close();

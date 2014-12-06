@@ -1,4 +1,4 @@
 {
-    "version": "1.3s",
-    "description": "Removed SciMCLib dependency"
+    "version": "1.4s",
+    "description": "Tiny performance improvement"
 }
