@@ -1,9 +1,6 @@
 package com.sci.torcherino.tile;
 
-import com.google.common.collect.ImmutableSet;
-import com.sci.torcherino.init.ModBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
@@ -15,7 +12,7 @@ import java.util.Set;
  * @author sci4me
  * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  */
-public class TileTorcherino extends TileEntity {
+public final class TileTorcherino extends TileEntity {
     private static final String[] MODES = new String[]{"Stopped", "Radius: +1, Area: 3x3x3", "Radius: +2, Area: 5x3x5", "Radius: +3, Area: 7x3x7", "Radius: +4, Area: 9x3x9"};
     private static final String[] SPEEDS = new String[]{"Stopped", "100% increase", "200% increase", "300% increase", "400% increase"};
 
@@ -84,11 +81,11 @@ public class TileTorcherino extends TileEntity {
         }
     }
 
-    public void setActive(boolean active) {
+    public void setActive(final boolean active) {
         this.isActive = active;
     }
 
-    public void changeMode(boolean sneaking) {
+    public void changeMode(final boolean sneaking) {
         if (sneaking) {
             if (this.speed < SPEEDS.length - 1)
                 this.speed++;
