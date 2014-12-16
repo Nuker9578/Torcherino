@@ -1,4 +1,4 @@
 {
-    "version": "1.6s",
-    "description": "Small improvements"
+    "version": "1.7s",
+    "description": "Added an IMC api that allows blocks and tiles to be blacklisted, and more localizations"
 }

@@ -7,23 +7,15 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * @author sci4me
  * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  */
 public class TileTorcherino extends TileEntity {
-    private static final ImmutableSet<Block> blacklist = ImmutableSet.of(
-            Blocks.air,
-            Blocks.bedrock,
-            Blocks.obsidian,
-            Blocks.stone,
-            Blocks.glowstone,
-            Blocks.netherrack,
-            Blocks.sand,
-            Blocks.gravel,
-            ModBlocks.torcherino);
     private static final String[] MODES = new String[]{"Stopped", "Radius: +1, Area: 3x3x3", "Radius: +2, Area: 5x3x5", "Radius: +3, Area: 7x3x7", "Radius: +4, Area: 9x3x9"};
     private static final String[] SPEEDS = new String[]{"Stopped", "100% increase", "200% increase", "300% increase", "400% increase"};
 
@@ -69,7 +61,7 @@ public class TileTorcherino extends TileEntity {
                 for (int z = this.zMin; z <= this.zMax; z++) {
                     final Block block = this.worldObj.getBlock(x, y, z);
 
-                    if (blacklist.contains(block))
+                    if (blacklistedBlocks.contains(block))
                         continue;
 
                     if (block.getTickRandomly()) {
@@ -79,7 +71,10 @@ public class TileTorcherino extends TileEntity {
 
                     if (block.hasTileEntity(this.worldObj.getBlockMetadata(x, y, z))) {
                         final TileEntity tile = this.worldObj.getTileEntity(x, y, z);
-                        if (tile != null && !(tile instanceof TileTorcherino) && !tile.isInvalid()) {
+                        if (tile != null && !tile.isInvalid()) {
+                            if (blacklistedTiles.contains(tile.getClass()))
+                                continue;
+
                             for (int i = 0; i < this.speed; i++)
                                 tile.updateEntity();
                         }
@@ -130,4 +125,15 @@ public class TileTorcherino extends TileEntity {
         this.mode = nbt.getByte("Mode");
         this.isActive = nbt.getBoolean("IsActive");
     }
+
+    public static void blacklistBlock(final Block block) {
+        blacklistedBlocks.add(block);
+    }
+
+    public static void blacklistTile(final Class<? extends TileEntity> tile) {
+        blacklistedTiles.add(tile);
+    }
+
+    private static Set<Block> blacklistedBlocks = new HashSet<Block>();
+    private static Set<Class<? extends TileEntity>> blacklistedTiles = new HashSet<Class<? extends TileEntity>>();
 }
