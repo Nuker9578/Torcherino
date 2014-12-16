@@ -27,6 +27,8 @@ import java.io.File;
 public class Torcherino implements IUpdatableMod {
     private static Torcherino instance;
 
+    public static boolean animatedTextures;
+
     @Mod.InstanceFactory
     public static Torcherino instance() {
         if (Torcherino.instance == null)
@@ -49,6 +51,8 @@ public class Torcherino implements IUpdatableMod {
         final Configuration cfg = new Configuration(new File(folder, "Torcherino.cfg"));
         try {
             cfg.load();
+
+            animatedTextures = cfg.getBoolean("animatedTextures", "visual", true, "Should Torcherino use animated textures?");
 
             ModBlocks.init();
             Recipes.init(cfg);

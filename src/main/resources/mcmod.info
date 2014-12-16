@@ -5,7 +5,7 @@
   "description": "Simple mod that adds OP torches.",
   "version": "${mod_version}",
   "mcversion": "${minecraft_version}",
-  "url": "",
+  "url": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2290415-sci4mes-mods-scimclib-torcherino",
   "updateUrl": "",
   "authorList": ["Moze_Intel", "sci4me"],
   "credits": "Moze Intel for 99.9% of the mod. I (sci4me) am just continuing it for him. :)",

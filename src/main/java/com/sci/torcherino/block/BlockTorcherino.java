@@ -1,5 +1,6 @@
 package com.sci.torcherino.block;
 
+import com.sci.torcherino.Torcherino;
 import com.sci.torcherino.tile.TileTorcherino;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -22,6 +23,7 @@ public final class BlockTorcherino extends BlockTorch implements ITileEntityProv
     {
         this.setBlockName("torcherino");
         this.setLightLevel(0.75f);
+        this.setBlockTextureName("torcherino:torcherino" + (Torcherino.animatedTextures ? "_animated" : ""));
     }
 
     @Override
@@ -81,13 +83,6 @@ public final class BlockTorcherino extends BlockTorch implements ITileEntityProv
         }
 
         return false;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(final IIconRegister r)
-    {
-        this.blockIcon = r.registerIcon("torcherino:torcherino");
     }
 
     @Override
