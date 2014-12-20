@@ -67,6 +67,12 @@ public class Torcherino implements IUpdatableMod {
         TileTorcherino.blacklistBlock(Blocks.air);
         TileTorcherino.blacklistBlock(ModBlocks.torcherino);
         TileTorcherino.blacklistTile(TileTorcherino.class);
+
+        TileTorcherino.blacklistBlock(Blocks.water);
+        TileTorcherino.blacklistBlock(Blocks.flowing_water);
+
+        TileTorcherino.blacklistBlock(Blocks.lava);
+        TileTorcherino.blacklistBlock(Blocks.flowing_lava);
     }
 
     @Mod.EventHandler

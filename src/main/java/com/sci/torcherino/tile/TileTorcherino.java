@@ -3,6 +3,8 @@ package com.sci.torcherino.tile;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.FluidRegistry;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -58,7 +60,13 @@ public final class TileTorcherino extends TileEntity {
                 for (int z = this.zMin; z <= this.zMax; z++) {
                     final Block block = this.worldObj.getBlock(x, y, z);
 
+                    if(block == null)
+                        continue;
+
                     if (blacklistedBlocks.contains(block))
+                        continue;
+
+                    if(block instanceof BlockFluidBase)
                         continue;
 
                     if (block.getTickRandomly()) {
