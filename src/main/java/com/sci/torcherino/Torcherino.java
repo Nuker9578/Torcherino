@@ -15,6 +15,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
@@ -24,23 +25,30 @@ import java.io.File;
  * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  */
 @Mod(modid = Props.ID, name = Props.NAME, version = Props.VERSION)
-public class Torcherino implements IUpdatableMod {
+public class Torcherino implements IUpdatableMod
+{
     private static Torcherino instance;
 
     public static boolean animatedTextures;
 
     @Mod.InstanceFactory
-    public static Torcherino instance() {
+    public static Torcherino instance()
+    {
         if (Torcherino.instance == null)
             Torcherino.instance = new Torcherino();
         return Torcherino.instance;
     }
 
-    private Torcherino() {
+    private String[] blacklistedBlocks;
+    private String[] blacklistedTiles;
+
+    private Torcherino()
+    {
     }
 
     @Mod.EventHandler
-    public void preInit(final FMLPreInitializationEvent evt) {
+    public void preInit(final FMLPreInitializationEvent evt)
+    {
         final File folder = new File(evt.getModConfigurationDirectory(), "sci4me");
 
         if (!folder.exists())
@@ -49,21 +57,28 @@ public class Torcherino implements IUpdatableMod {
         UpdateChecker.register(this);
 
         final Configuration cfg = new Configuration(new File(folder, "Torcherino.cfg"));
-        try {
+        try
+        {
             cfg.load();
 
-            animatedTextures = cfg.getBoolean("animatedTextures", "visual", true, "Should Torcherino use animated textures?");
+            Torcherino.animatedTextures = cfg.getBoolean("animatedTextures", "visual", true, "Should Torcherino use animated textures?");
+
+            this.blacklistedBlocks = cfg.getStringList("blacklistedBlocks", "blacklist", new String[]{}, "modid:unlocalized");
+            this.blacklistedTiles = cfg.getStringList("blacklistedTiles", "blacklist", new String[]{}, "Fully qualified class name");
 
             ModBlocks.init();
             Recipes.init(cfg);
-        } finally {
+        }
+        finally
+        {
             if (cfg.hasChanged())
                 cfg.save();
         }
     }
 
     @Mod.EventHandler
-    public void init(final FMLInitializationEvent evt) {
+    public void init(final FMLInitializationEvent evt)
+    {
         TileTorcherino.blacklistBlock(Blocks.air);
         TileTorcherino.blacklistBlock(ModBlocks.torcherino);
         TileTorcherino.blacklistTile(TileTorcherino.class);
@@ -76,71 +91,100 @@ public class Torcherino implements IUpdatableMod {
     }
 
     @Mod.EventHandler
-    public void postInit(final FMLPostInitializationEvent evt) {
+    public void postInit(final FMLPostInitializationEvent evt)
+    {
+        for (final String block : this.blacklistedBlocks)
+            this.blacklistBlock(block);
+
+        for (final String tile : this.blacklistedTiles)
+            this.blacklistTile(tile);
+    }
+
+    private void blacklistBlock(final String s)
+    {
+        final String[] parts = s.split(":");
+
+        if (parts.length != 2)
+        {
+            System.out.println("Received malformed message: " + s);
+            return;
+        }
+
+        final Block block = GameRegistry.findBlock(parts[0], parts[1]);
+
+        if (block == null)
+        {
+            System.out.println("Could not find block: " + s + ", ignoring");
+            return;
+        }
+
+        System.out.println("Blacklisting block: " + block.getUnlocalizedName());
+
+        TileTorcherino.blacklistBlock(block);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void blacklistTile(final String s)
+    {
+        try
+        {
+            final Class<?> clazz = this.getClass().getClassLoader().loadClass(s);
+
+            if (clazz == null)
+            {
+                System.out.println("Class null: " + s);
+                return;
+            }
+
+            if (!TileEntity.class.isAssignableFrom(clazz))
+            {
+                System.out.println("Class not a TileEntity: " + s);
+                return;
+            }
+
+            TileTorcherino.blacklistTile((Class<? extends TileEntity>) clazz);
+        }
+        catch (final ClassNotFoundException e)
+        {
+            System.out.println("Class not found: " + s + ", ignoring");
+        }
     }
 
     @Mod.EventHandler
-    public void imcMessage(final FMLInterModComms.IMCEvent evt) {
-        for (final FMLInterModComms.IMCMessage message : evt.getMessages()) {
-            if (!message.isStringMessage()) {
+    public void imcMessage(final FMLInterModComms.IMCEvent evt)
+    {
+        for (final FMLInterModComms.IMCMessage message : evt.getMessages())
+        {
+            if (!message.isStringMessage())
+            {
                 System.out.println("Received non-string message! Ignoring");
                 continue;
             }
 
             final String s = message.getStringValue();
 
-            if (message.key.equals("blacklist-block")) {
-                final String[] parts = s.split(":");
-
-                if (parts.length != 2) {
-                    System.out.println("Received malformed message: " + s);
-                    continue;
-                }
-
-                final Block block = GameRegistry.findBlock(parts[0], parts[1]);
-
-                if (block == null) {
-                    System.out.println("Could not find block: " + s + ", ignoring");
-                    continue;
-                }
-
-                System.out.println("Blacklisting block: " + block.getUnlocalizedName());
-
-                TileTorcherino.blacklistBlock(block);
-            } else if (message.key.equals("blacklist-tile")) {
-                try {
-                    final Class<?> clazz = Class.forName(s);
-
-                    if (clazz == null) {
-                        System.out.println("Class null: " + s);
-                        continue;
-                    }
-
-                    if (!clazz.isAssignableFrom(TileEntity.class)) {
-                        System.out.println("Class not a TileEntity: " + s);
-                        continue;
-                    }
-
-                    TileTorcherino.blacklistTile((Class<? extends TileEntity>) clazz);
-                } catch (ClassNotFoundException e) {
-                    System.out.println("Class not found: " + s + ", ignoring");
-                }
-            }
+            if (message.key.equals("blacklist-block"))
+                this.blacklistBlock(s);
+            else if (message.key.equals("blacklist-tile"))
+                this.blacklistTile(s);
         }
     }
 
     @Override
-    public String name() {
+    public String name()
+    {
         return Props.NAME;
     }
 
     @Override
-    public String updateURL() {
+    public String updateURL()
+    {
         return Props.UPDATE_URL;
     }
 
     @Override
-    public ModVersion version() {
+    public ModVersion version()
+    {
         return ModVersion.parse(Props.VERSION);
     }
 }

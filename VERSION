@@ -1,4 +1,4 @@
 {
-    "version": "1.8s",
-    "description": "Fixed water dupe bug, added animated texture"
+    "version": "1.9s",
+    "description": "Added tile/block blacklists to config file as well as bug fixes."
 }

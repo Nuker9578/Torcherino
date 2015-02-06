@@ -14,7 +14,8 @@ import java.util.Set;
  * @author sci4me
  * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  */
-public final class TileTorcherino extends TileEntity {
+public final class TileTorcherino extends TileEntity
+{
     private static final String[] MODES = new String[]{"Stopped", "Radius: +1, Area: 3x3x3", "Radius: +2, Area: 5x3x5", "Radius: +3, Area: 7x3x7", "Radius: +4, Area: 9x3x9"};
     private static final String[] SPEEDS = new String[]{"Stopped", "100% increase", "200% increase", "300% increase", "400% increase"};
 
@@ -31,21 +32,24 @@ public final class TileTorcherino extends TileEntity {
     private int yMax;
     private int zMax;
 
-    public TileTorcherino() {
+    public TileTorcherino()
+    {
         this.isActive = true;
         this.cachedMode = -1;
         this.rand = new Random();
     }
 
     @Override
-    public void updateEntity() {
+    public void updateEntity()
+    {
         if (this.worldObj.isRemote)
             return;
 
         if (!this.isActive || this.mode == 0 || this.speed == 0)
             return;
 
-        if (this.cachedMode != this.mode) {
+        if (this.cachedMode != this.mode)
+        {
             this.xMin = this.xCoord - this.mode;
             this.yMin = this.yCoord - 1;
             this.zMin = this.zCoord - this.mode;
@@ -55,33 +59,43 @@ public final class TileTorcherino extends TileEntity {
             this.cachedMode = this.mode;
         }
 
-        for (int x = this.xMin; x <= this.xMax; x++) {
-            for (int y = this.yMin; y <= this.yMax; y++) {
-                for (int z = this.zMin; z <= this.zMax; z++) {
+        for (int x = this.xMin; x <= this.xMax; x++)
+        {
+            for (int y = this.yMin; y <= this.yMax; y++)
+            {
+                for (int z = this.zMin; z <= this.zMax; z++)
+                {
                     final Block block = this.worldObj.getBlock(x, y, z);
 
-                    if(block == null)
+                    if (block == null)
                         continue;
 
                     if (blacklistedBlocks.contains(block))
                         continue;
 
-                    if(block instanceof BlockFluidBase)
+                    if (block instanceof BlockFluidBase)
                         continue;
 
-                    if (block.getTickRandomly()) {
+                    if (block.getTickRandomly())
+                    {
                         for (int i = 0; i < this.speed; i++)
                             block.updateTick(this.worldObj, x, y, z, this.rand);
                     }
 
-                    if (block.hasTileEntity(this.worldObj.getBlockMetadata(x, y, z))) {
+                    if (block.hasTileEntity(this.worldObj.getBlockMetadata(x, y, z)))
+                    {
                         final TileEntity tile = this.worldObj.getTileEntity(x, y, z);
-                        if (tile != null && !tile.isInvalid()) {
+                        if (tile != null && !tile.isInvalid())
+                        {
                             if (blacklistedTiles.contains(tile.getClass()))
                                 continue;
 
                             for (int i = 0; i < this.speed; i++)
+                            {
+                                if (tile.isInvalid())
+                                    break;
                                 tile.updateEntity();
+                            }
                         }
                     }
                 }
@@ -89,17 +103,22 @@ public final class TileTorcherino extends TileEntity {
         }
     }
 
-    public void setActive(final boolean active) {
+    public void setActive(final boolean active)
+    {
         this.isActive = active;
     }
 
-    public void changeMode(final boolean sneaking) {
-        if (sneaking) {
+    public void changeMode(final boolean sneaking)
+    {
+        if (sneaking)
+        {
             if (this.speed < SPEEDS.length - 1)
                 this.speed++;
             else
                 this.speed = 0;
-        } else {
+        }
+        else
+        {
             if (this.mode < MODES.length - 1)
                 this.mode++;
             else
@@ -107,16 +126,19 @@ public final class TileTorcherino extends TileEntity {
         }
     }
 
-    public String getSpeedDescription() {
+    public String getSpeedDescription()
+    {
         return SPEEDS[this.speed];
     }
 
-    public String getModeDescription() {
+    public String getModeDescription()
+    {
         return MODES[this.mode];
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt) {
+    public void writeToNBT(NBTTagCompound nbt)
+    {
         super.writeToNBT(nbt);
         nbt.setByte("Speed", speed);
         nbt.setByte("Mode", mode);
@@ -124,18 +146,21 @@ public final class TileTorcherino extends TileEntity {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) {
+    public void readFromNBT(NBTTagCompound nbt)
+    {
         super.readFromNBT(nbt);
         this.speed = nbt.getByte("Speed");
         this.mode = nbt.getByte("Mode");
         this.isActive = nbt.getBoolean("IsActive");
     }
 
-    public static void blacklistBlock(final Block block) {
+    public static void blacklistBlock(final Block block)
+    {
         blacklistedBlocks.add(block);
     }
 
-    public static void blacklistTile(final Class<? extends TileEntity> tile) {
+    public static void blacklistTile(final Class<? extends TileEntity> tile)
+    {
         blacklistedTiles.add(tile);
     }
 
