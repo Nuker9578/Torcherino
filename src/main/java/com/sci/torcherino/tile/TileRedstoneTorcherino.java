@@ -3,7 +3,9 @@ package com.sci.torcherino.tile;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fluids.BlockFluidBase;
+
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -12,7 +14,7 @@ import java.util.Set;
  * @author sci4me
  * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  */
-public final class TileTorcherino extends TileEntity
+public final class TileRedstoneTorcherino extends TileEntity
 {
     private static final String[] MODES = new String[]{"Stopped", "Radius: +1, Area: 3x3x3", "Radius: +2, Area: 5x3x5", "Radius: +3, Area: 7x3x7", "Radius: +4, Area: 9x3x9"};
     private static final String[] SPEEDS = new String[]{"Stopped", "100% increase", "200% increase", "300% increase", "400% increase"};
@@ -29,12 +31,26 @@ public final class TileTorcherino extends TileEntity
     private int xMax;
     private int yMax;
     private int zMax;
+	private boolean field_150113_a;
 
-    public TileTorcherino()
+    public TileRedstoneTorcherino()
     {
         this.isActive = true;
         this.cachedMode = -1;
         this.rand = new Random();
+    }
+    
+    public int isProvidingWeakPower(IBlockAccess p_149709_1_, int p_149709_2_, int p_149709_3_, int p_149709_4_, int p_149709_5_)
+    {
+        if (!this.field_150113_a)
+        {
+            return 0;
+        }
+        else
+        {
+            int i1 = p_149709_1_.getBlockMetadata(p_149709_2_, p_149709_3_, p_149709_4_);
+            return i1 == 5 && p_149709_5_ == 1 ? 0 : (i1 == 3 && p_149709_5_ == 3 ? 0 : (i1 == 4 && p_149709_5_ == 2 ? 0 : (i1 == 1 && p_149709_5_ == 5 ? 0 : (i1 == 2 && p_149709_5_ == 4 ? 0 : 15))));
+        }
     }
 
     @Override
