@@ -4,6 +4,8 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.FluidRegistry;
+
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;

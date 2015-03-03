@@ -16,11 +16,6 @@ public final class Recipes {
             GameRegistry.addRecipe(new ItemStack(ModBlocks.torcherino), new Object[]{"XCX", "CTC", "XCX", 'C', Items.clock, 'T', Blocks.torch});
         else
             GameRegistry.addRecipe(new ItemStack(ModBlocks.torcherino), new Object[]{"SCS", "CTC", "SCS", 'C', Items.clock, 'S', Items.nether_star, 'T', Blocks.torch});
-        
-        if (cfg.getBoolean("OverPoweredRecipe", "General", true, "Is the recipe for Torcherino extremely OP?"))
-            GameRegistry.addRecipe(new ItemStack(ModBlocks.redtorcherino), new Object[]{"XCX", "CTC", "XCX", 'C', Items.clock, 'T', Blocks.torch, 'X', Items.redstone});
-        else
-            GameRegistry.addRecipe(new ItemStack(ModBlocks.redtorcherino), new Object[]{"SCS", "XTX", "SCS", 'C', Items.clock, 'S', Items.nether_star, 'T', Blocks.torch, 'X', Items.redstone});
     }
 
     private Recipes() {

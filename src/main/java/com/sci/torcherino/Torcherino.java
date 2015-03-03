@@ -3,7 +3,9 @@ package com.sci.torcherino;
 import com.sci.torcherino.init.ModBlocks;
 import com.sci.torcherino.init.Recipes;
 import com.sci.torcherino.tile.TileTorcherino;
-import com.sci.torcherino.tile.TileRedstoneTorcherino;
+import com.sci.torcherino.update.IUpdatableMod;
+import com.sci.torcherino.update.ModVersion;
+import com.sci.torcherino.update.UpdateChecker;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms;
@@ -13,6 +15,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
@@ -22,7 +25,7 @@ import java.io.File;
  * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  */
 @Mod(modid = Props.ID, name = Props.NAME, version = Props.VERSION)
-public class Torcherino
+public class Torcherino implements IUpdatableMod
 {
     private static Torcherino instance;
 
@@ -51,6 +54,7 @@ public class Torcherino
         if (!folder.exists())
             folder.mkdir();
 
+        UpdateChecker.register(this);
 
         final Configuration cfg = new Configuration(new File(folder, "Torcherino.cfg"));
         try
@@ -84,16 +88,6 @@ public class Torcherino
 
         TileTorcherino.blacklistBlock(Blocks.lava);
         TileTorcherino.blacklistBlock(Blocks.flowing_lava);
-    
-        TileRedstoneTorcherino.blacklistBlock(Blocks.air);
-        TileRedstoneTorcherino.blacklistBlock(ModBlocks.torcherino);
-        TileRedstoneTorcherino.blacklistTile(TileRedstoneTorcherino.class);
-
-        TileRedstoneTorcherino.blacklistBlock(Blocks.water);
-        TileRedstoneTorcherino.blacklistBlock(Blocks.flowing_water);
-
-        TileRedstoneTorcherino.blacklistBlock(Blocks.lava);
-        TileRedstoneTorcherino.blacklistBlock(Blocks.flowing_lava);
     }
 
     @Mod.EventHandler
@@ -127,7 +121,6 @@ public class Torcherino
         System.out.println("Blacklisting block: " + block.getUnlocalizedName());
 
         TileTorcherino.blacklistBlock(block);
-        TileRedstoneTorcherino.blacklistBlock(block);
     }
 
     @SuppressWarnings("unchecked")
@@ -150,7 +143,6 @@ public class Torcherino
             }
 
             TileTorcherino.blacklistTile((Class<? extends TileEntity>) clazz);
-            TileRedstoneTorcherino.blacklistTile((Class<? extends TileEntity>) clazz);
         }
         catch (final ClassNotFoundException e)
         {
@@ -178,4 +170,21 @@ public class Torcherino
         }
     }
 
+    @Override
+    public String name()
+    {
+        return Props.NAME;
+    }
+
+    @Override
+    public String updateURL()
+    {
+        return Props.UPDATE_URL;
+    }
+
+    @Override
+    public ModVersion version()
+    {
+        return ModVersion.parse(Props.VERSION);
+    }
 }
